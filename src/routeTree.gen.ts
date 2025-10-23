@@ -14,9 +14,11 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './pages/__root'
 import { Route as IndexImport } from './pages/index'
+import { Route as TagCloudIndexImport } from './pages/tag-cloud/index'
 import { Route as SearchDataRepositoriesIndexImport } from './pages/search-data-repositories/index'
 import { Route as RecommendedMoviesIndexImport } from './pages/recommended-movies/index'
 import { Route as PlaygroundIndexImport } from './pages/playground/index'
+import { Route as MoodDiscoveryIndexImport } from './pages/mood-discovery/index'
 import { Route as MonitorActivitiesIndexImport } from './pages/monitor-activities/index'
 import { Route as ExploreDataIndexImport } from './pages/explore-data/index'
 import { Route as SearchDataRepositoriesIdImport } from './pages/search-data-repositories/$id'
@@ -75,6 +77,12 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const TagCloudIndexRoute = TagCloudIndexImport.update({
+  id: '/tag-cloud/',
+  path: '/tag-cloud/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const SearchDataRepositoriesIndexRoute =
   SearchDataRepositoriesIndexImport.update({
     id: '/search-data-repositories/',
@@ -91,6 +99,12 @@ const RecommendedMoviesIndexRoute = RecommendedMoviesIndexImport.update({
 const PlaygroundIndexRoute = PlaygroundIndexImport.update({
   id: '/playground/',
   path: '/playground/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MoodDiscoveryIndexRoute = MoodDiscoveryIndexImport.update({
+  id: '/mood-discovery/',
+  path: '/mood-discovery/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -332,6 +346,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MonitorActivitiesIndexImport
       parentRoute: typeof rootRoute
     }
+    '/mood-discovery/': {
+      id: '/mood-discovery/'
+      path: '/mood-discovery'
+      fullPath: '/mood-discovery'
+      preLoaderRoute: typeof MoodDiscoveryIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/playground/': {
       id: '/playground/'
       path: '/playground'
@@ -351,6 +372,13 @@ declare module '@tanstack/react-router' {
       path: '/search-data-repositories'
       fullPath: '/search-data-repositories'
       preLoaderRoute: typeof SearchDataRepositoriesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/tag-cloud/': {
+      id: '/tag-cloud/'
+      path: '/tag-cloud'
+      fullPath: '/tag-cloud'
+      preLoaderRoute: typeof TagCloudIndexImport
       parentRoute: typeof rootRoute
     }
     '/compare-data/_layout/compare': {
@@ -587,9 +615,11 @@ export interface FileRoutesByFullPath {
   '/search-data-repositories/$id': typeof SearchDataRepositoriesIdRoute
   '/explore-data': typeof ExploreDataIndexRoute
   '/monitor-activities': typeof MonitorActivitiesIndexRoute
+  '/mood-discovery': typeof MoodDiscoveryIndexRoute
   '/playground': typeof PlaygroundIndexRoute
   '/recommended-movies': typeof RecommendedMoviesIndexRoute
   '/search-data-repositories': typeof SearchDataRepositoriesIndexRoute
+  '/tag-cloud': typeof TagCloudIndexRoute
   '/compare-data/compare': typeof CompareDataLayoutCompareRoute
   '/compare-data/new': typeof CompareDataLayoutNewRoute
   '/contribute-data/new': typeof ContributeDataLayoutNewRoute
@@ -616,9 +646,11 @@ export interface FileRoutesByTo {
   '/search-data-repositories/$id': typeof SearchDataRepositoriesIdRoute
   '/explore-data': typeof ExploreDataIndexRoute
   '/monitor-activities': typeof MonitorActivitiesIndexRoute
+  '/mood-discovery': typeof MoodDiscoveryIndexRoute
   '/playground': typeof PlaygroundIndexRoute
   '/recommended-movies': typeof RecommendedMoviesIndexRoute
   '/search-data-repositories': typeof SearchDataRepositoriesIndexRoute
+  '/tag-cloud': typeof TagCloudIndexRoute
   '/compare-data/compare': typeof CompareDataLayoutCompareRoute
   '/compare-data/new': typeof CompareDataLayoutNewRoute
   '/contribute-data/new': typeof ContributeDataLayoutNewRoute
@@ -646,9 +678,11 @@ export interface FileRoutesById {
   '/search-data-repositories/$id': typeof SearchDataRepositoriesIdRoute
   '/explore-data/': typeof ExploreDataIndexRoute
   '/monitor-activities/': typeof MonitorActivitiesIndexRoute
+  '/mood-discovery/': typeof MoodDiscoveryIndexRoute
   '/playground/': typeof PlaygroundIndexRoute
   '/recommended-movies/': typeof RecommendedMoviesIndexRoute
   '/search-data-repositories/': typeof SearchDataRepositoriesIndexRoute
+  '/tag-cloud/': typeof TagCloudIndexRoute
   '/compare-data/_layout/compare': typeof CompareDataLayoutCompareRoute
   '/compare-data/_layout/new': typeof CompareDataLayoutNewRoute
   '/contribute-data/_layout/new': typeof ContributeDataLayoutNewRoute
@@ -678,9 +712,11 @@ export interface FileRouteTypes {
     | '/search-data-repositories/$id'
     | '/explore-data'
     | '/monitor-activities'
+    | '/mood-discovery'
     | '/playground'
     | '/recommended-movies'
     | '/search-data-repositories'
+    | '/tag-cloud'
     | '/compare-data/compare'
     | '/compare-data/new'
     | '/contribute-data/new'
@@ -706,9 +742,11 @@ export interface FileRouteTypes {
     | '/search-data-repositories/$id'
     | '/explore-data'
     | '/monitor-activities'
+    | '/mood-discovery'
     | '/playground'
     | '/recommended-movies'
     | '/search-data-repositories'
+    | '/tag-cloud'
     | '/compare-data/compare'
     | '/compare-data/new'
     | '/contribute-data/new'
@@ -734,9 +772,11 @@ export interface FileRouteTypes {
     | '/search-data-repositories/$id'
     | '/explore-data/'
     | '/monitor-activities/'
+    | '/mood-discovery/'
     | '/playground/'
     | '/recommended-movies/'
     | '/search-data-repositories/'
+    | '/tag-cloud/'
     | '/compare-data/_layout/compare'
     | '/compare-data/_layout/new'
     | '/contribute-data/_layout/new'
@@ -765,9 +805,11 @@ export interface RootRouteChildren {
   SearchDataRepositoriesIdRoute: typeof SearchDataRepositoriesIdRoute
   ExploreDataIndexRoute: typeof ExploreDataIndexRoute
   MonitorActivitiesIndexRoute: typeof MonitorActivitiesIndexRoute
+  MoodDiscoveryIndexRoute: typeof MoodDiscoveryIndexRoute
   PlaygroundIndexRoute: typeof PlaygroundIndexRoute
   RecommendedMoviesIndexRoute: typeof RecommendedMoviesIndexRoute
   SearchDataRepositoriesIndexRoute: typeof SearchDataRepositoriesIndexRoute
+  TagCloudIndexRoute: typeof TagCloudIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -781,9 +823,11 @@ const rootRouteChildren: RootRouteChildren = {
   SearchDataRepositoriesIdRoute: SearchDataRepositoriesIdRoute,
   ExploreDataIndexRoute: ExploreDataIndexRoute,
   MonitorActivitiesIndexRoute: MonitorActivitiesIndexRoute,
+  MoodDiscoveryIndexRoute: MoodDiscoveryIndexRoute,
   PlaygroundIndexRoute: PlaygroundIndexRoute,
   RecommendedMoviesIndexRoute: RecommendedMoviesIndexRoute,
   SearchDataRepositoriesIndexRoute: SearchDataRepositoriesIndexRoute,
+  TagCloudIndexRoute: TagCloudIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -806,9 +850,11 @@ export const routeTree = rootRoute
         "/search-data-repositories/$id",
         "/explore-data/",
         "/monitor-activities/",
+        "/mood-discovery/",
         "/playground/",
         "/recommended-movies/",
-        "/search-data-repositories/"
+        "/search-data-repositories/",
+        "/tag-cloud/"
       ]
     },
     "/": {
@@ -877,6 +923,9 @@ export const routeTree = rootRoute
     "/monitor-activities/": {
       "filePath": "monitor-activities/index.tsx"
     },
+    "/mood-discovery/": {
+      "filePath": "mood-discovery/index.tsx"
+    },
     "/playground/": {
       "filePath": "playground/index.tsx"
     },
@@ -885,6 +934,9 @@ export const routeTree = rootRoute
     },
     "/search-data-repositories/": {
       "filePath": "search-data-repositories/index.tsx"
+    },
+    "/tag-cloud/": {
+      "filePath": "tag-cloud/index.tsx"
     },
     "/compare-data/_layout/compare": {
       "filePath": "compare-data/_layout/compare.tsx",

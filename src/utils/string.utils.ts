@@ -33,13 +33,20 @@ export const getSubRoutes = (flatRoutes: AnyRoute[], subRouteName: string) => {
 };
 
 export const getTaskFlowRoutes = (flatRoutes: AnyRoute[]) => {
+  const excludedRoutes = [
+    'playground',
+    'contribute-data',
+    'monitor-activities',
+    'run-computation',
+  ];
+  
   return flatRoutes.filter((route: AnyRoute) => {
     const pathParts = route.fullPath.split('/').filter((d: string) => d);
     const lastCharacter = route.fullPath[route.fullPath.length - 1];
     if (
       pathParts.length === 1 &&
-      pathParts[0] !== 'playground' &&
       pathParts[0] !== undefined &&
+      !excludedRoutes.includes(pathParts[0]) &&
       lastCharacter === '/'
     ) {
       return route;

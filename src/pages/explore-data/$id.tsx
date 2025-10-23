@@ -17,6 +17,7 @@ import { useMoviesWithLinks } from '../../hooks/useMoviesWithLinks';
 import { useTMDBPoster } from '../../hooks/useTMDBPoster';
 import { useMovieRatings } from '../../hooks/useMovieRatings';
 import { useMovieTags } from '../../hooks/useMovieTags';
+import { useMovieRatingsTimeline } from '../../hooks/useMovieRatingsTimeline';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import Plot from 'react-plotly.js';
 
@@ -34,10 +35,11 @@ function DataDetailPage() {
   const movies = useMoviesWithLinks();
   const data = movies?.find((movie) => movie.movieId === id);
 
-  // Load movie poster, ratings, and tags
+  // Load movie poster, ratings, tags, and timeline
   const { posterUrl, loading } = useTMDBPoster(data?.tmdbId);
   const ratingStats = useMovieRatings(data?.movieId);
   const tagData = useMovieTags(data?.movieId);
+  const timelineData = useMovieRatingsTimeline(data?.movieId);
 
   return (
     <Box>
@@ -250,6 +252,78 @@ function DataDetailPage() {
                   style={{ width: '100%' }}
                   useResizeHandler
                 />
+              </Paper>
+            )}
+
+            {/* Ratings Over Time Chart */}
+            {timelineData && timelineData.length > 0 && (
+              <Paper sx={{ padding: 2, marginBottom: 3 }}>
+                <Typography variant="h6" gutterBottom>
+                  Ratings Over Time
+                </Typography>
+                <Typography variant="body2" color="text.secondary" paragraph>
+                  How ratings evolved from {timelineData[0].date.toLocaleDateString()} to{' '}
+                  {timelineData[timelineData.length - 1].date.toLocaleDateString()}
+                </Typography>
+                <Plot
+                  data={[
+                    {
+                      x: timelineData.map((d) => d.date),
+                      y: timelineData.map((d) => d.rating),
+                      type: 'scatter',
+                      mode: 'markers',
+                      name: 'Monthly Average',
+                      marker: {
+                        size: timelineData.map((d) => Math.min(d.count * 2 + 4, 20)),
+                        color: '#90caf9',
+                        opacity: 0.6,
+                        line: {
+                          color: '#1976d2',
+                          width: 1,
+                        },
+                      },
+                    },
+                    {
+                      x: timelineData.map((d) => d.date),
+                      y: timelineData.map((d) => d.movingAverage),
+                      type: 'scatter',
+                      mode: 'lines',
+                      name: '3-Month Moving Avg',
+                      line: {
+                        color: '#1976d2',
+                        width: 3,
+                      },
+                    },
+                  ]}
+                  layout={{
+                    xaxis: {
+                      title: 'Date',
+                      type: 'date',
+                    },
+                    yaxis: {
+                      title: 'Average Rating',
+                      range: [0, 5.5],
+                      dtick: 0.5,
+                    },
+                    showlegend: true,
+                    legend: {
+                      x: 0,
+                      y: 1.15,
+                      orientation: 'h',
+                    },
+                    margin: { t: 40, r: 20, b: 60, l: 60 },
+                    height: 400,
+                    hovermode: 'closest',
+                  }}
+                  config={{
+                    displayModeBar: false,
+                  }}
+                  style={{ width: '100%' }}
+                  useResizeHandler
+                />
+                <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+                  Bubble size represents number of ratings that month. Line shows trend over time.
+                </Typography>
               </Paper>
             )}
 
