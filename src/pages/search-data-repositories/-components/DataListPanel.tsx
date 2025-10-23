@@ -48,7 +48,7 @@ export const DataListPanel: React.FC<DataListPanelProps> = ({
   const { isPending, isError, data, error } = useListQuery({
     activeFilters,
     // CUSTOMIZE: the main data source
-    dataSource: 'dummy-data/datasets.json',
+    dataSource: 'data/movie-collections.json',
     filterConfigs,
     offset,
     page,

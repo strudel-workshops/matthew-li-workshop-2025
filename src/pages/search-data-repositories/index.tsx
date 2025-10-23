@@ -15,39 +15,31 @@ export const Route = createFileRoute('/search-data-repositories/')({
 // CUSTOMIZE: the filter definitions
 const filterConfigs: FilterConfig[] = [
   {
-    /**
-     * Exact name of the property field in the data to filter on.
-     */
     field: 'category',
-    /**
-     * Text to display in the label for the filter.
-     */
-    label: 'Category',
+    label: 'Collection Type',
     operator: 'contains-one-of',
-    /**
-     * The kind of filter component and function to use. Must be "CheckboxList", "Slider", or "data range".
-     */
     filterComponent: 'CheckboxList',
-    /**
-     * Extra options to pass to the filter based on the filter type.
-     */
     filterProps: {
       options: [
         {
-          label: 'Groundwater',
-          value: 'Groundwater',
+          label: 'Genre Collection',
+          value: 'Genre Collection',
         },
         {
-          label: 'Fires',
-          value: 'Fires',
+          label: 'Decade Collection',
+          value: 'Decade Collection',
         },
         {
-          label: 'Floods',
-          value: 'Floods',
+          label: 'Awards Collection',
+          value: 'Awards Collection',
         },
         {
-          label: 'Earthquakes',
-          value: 'Earthquakes',
+          label: 'Family Collection',
+          value: 'Family Collection',
+        },
+        {
+          label: 'Specialty Collection',
+          value: 'Specialty Collection',
         },
       ],
     },
@@ -60,25 +52,43 @@ const filterConfigs: FilterConfig[] = [
     filterProps: {
       options: [
         {
-          label: 'Boreal forest',
-          value: 'Boreal forest',
+          label: 'Classics',
+          value: 'Classics',
         },
         {
-          label: 'Carbon and greenhouse gas emissions',
-          value: 'Carbon and greenhouse gas emissions',
+          label: 'Comedy',
+          value: 'Comedy',
         },
         {
-          label: 'Ecology',
-          value: 'Ecology',
+          label: 'Drama',
+          value: 'Drama',
+        },
+        {
+          label: 'Action',
+          value: 'Action',
+        },
+        {
+          label: 'Sci-Fi',
+          value: 'Sci-Fi',
+        },
+        {
+          label: 'Romance',
+          value: 'Romance',
+        },
+        {
+          label: 'Thriller',
+          value: 'Thriller',
+        },
+        {
+          label: 'Family',
+          value: 'Family',
+        },
+        {
+          label: 'Independent',
+          value: 'Independent',
         },
       ],
     },
-  },
-  {
-    field: 'publication_date',
-    label: 'Publication Date',
-    operator: 'between-dates-inclusive',
-    filterComponent: 'DateRange',
   },
 ];
 
@@ -106,8 +116,8 @@ function DatasetExplorer() {
     <FilterContext>
       <Box>
         <PageHeader
-          pageTitle="Search Data Repositories App"
-          description="Description of this app section"
+          pageTitle="Movie Collections"
+          description="Browse curated collections of movies organized by genre, decade, and theme"
           sx={{
             marginBottom: 1,
             padding: 2,

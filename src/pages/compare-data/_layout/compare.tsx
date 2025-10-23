@@ -35,23 +35,23 @@ function ScenarioComparison() {
     <Box>
       <PageHeader
         // CUSTOMIZE: the title that displays at the top of the page
-        pageTitle="Compare Data App"
+        pageTitle="Movie Comparison"
         // CUSTOMIZE: the subtitle that displays underneath the title
-        description="Description of this app section"
+        description="Comparing selected movies side-by-side"
         actions={
           <Stack direction="row">
             <Box>
               <AppLink to="..">
                 {/* CUSTOMIZE: the back button text */}
                 <Button variant="contained" startIcon={<ArrowBackIcon />}>
-                  Back to scenarios
+                  Back to movie list
                 </Button>
               </AppLink>
             </Box>
             <Box>
               <AppLink to="/compare-data/new">
                 {/* CUSTOMIZE: the new button text */}
-                <Button variant="contained">New scenario</Button>
+                <Button variant="contained">New movie</Button>
               </AppLink>
             </Box>
           </Stack>

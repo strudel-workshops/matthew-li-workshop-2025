@@ -123,7 +123,7 @@ export const CompareDataProvider: React.FC<CompareDataProviderProps> = (
     if (state.comparing && state.selectedRows.length > 1) {
       const metrics = state.columns.filter((c) => c.isComparisonMetric);
       const scenarios = state.data.filter(
-        (d) => state.selectedRows.indexOf(d.id) > -1
+        (d) => state.selectedRows.indexOf(d[state.dataIdField]) > -1
       );
       const comparisonColumns: any[] = [
         {
@@ -137,11 +137,12 @@ export const CompareDataProvider: React.FC<CompareDataProviderProps> = (
         const row: ComparisonRow = {};
         row.metric = m.headerName;
         scenarios.forEach((s) => {
-          row[s.name] = s[m.field];
+          const columnName = s.title || s.name || s[state.dataIdField];
+          row[columnName] = s[m.field];
           if (i === 0) {
             comparisonColumns.push({
-              field: s.name,
-              headerName: s.name,
+              field: columnName,
+              headerName: columnName,
               width: 200,
             });
           }

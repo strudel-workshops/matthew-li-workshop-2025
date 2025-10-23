@@ -2,49 +2,20 @@ import React from 'react';
 import {
   Box,
   Button,
+  CircularProgress,
   IconButton,
+  Link,
   Paper,
   Stack,
   Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { LabelValueTable } from '../../../components/LabelValueTable';
 import { DataGrid } from '@mui/x-data-grid';
 import { AppLink } from '../../../components/AppLink';
-
-/**
- * Placeholder columns for related data table
- */
-const relatedColumns = [
-  {
-    field: 'id',
-    headerName: 'ID',
-    width: 50,
-  },
-  {
-    field: 'attr1',
-    headerName: 'Attribute 1',
-    width: 100,
-  },
-  {
-    field: 'attr2',
-    headerName: 'Attribute 2',
-    width: 100,
-  },
-  {
-    field: 'attr3',
-    headerName: 'Attribute 3',
-    width: 100,
-  },
-];
-
-/**
- * Placeholder rows for related data table
- */
-const emptyRows = Array(25).fill(0);
-const relatedRows = emptyRows.map((d, i) => {
-  return { id: i, attr1: 'value', attr2: 'value', attr3: 'value' };
-});
+import { useTMDBPoster } from '../../../hooks/useTMDBPoster';
+import { useMovieRatings } from '../../../hooks/useMovieRatings';
 
 interface PreviewPanelProps {
   /**
@@ -65,6 +36,9 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   previewItem,
   onClose,
 }) => {
+  const { posterUrl, loading } = useTMDBPoster(previewItem.tmdbId);
+  const ratingStats = useMovieRatings(previewItem.movieId);
+
   return (
     <Paper
       elevation={0}
@@ -77,59 +51,105 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
         <Stack spacing={1}>
           <Stack direction="row">
             <Typography variant="h6" component="h3" flex={1}>
-              <AppLink to="/explore-data/$id" params={{ id: previewItem.Id }}>
-                {previewItem['Planet Name']}
+              <AppLink
+                to="/explore-data/$id"
+                params={{ id: previewItem.movieId }}
+              >
+                {previewItem.title}
               </AppLink>
             </Typography>
             <IconButton size="small" onClick={onClose}>
               <CloseIcon />
             </IconButton>
           </Stack>
-          <Typography variant="body2">
-            Row description, subtitle, or helper text.
-          </Typography>
+          <Typography variant="body2">{previewItem.genres}</Typography>
         </Stack>
+        {loading && (
+          <Box display="flex" justifyContent="center" p={2}>
+            <CircularProgress size={40} />
+          </Box>
+        )}
+        {posterUrl && !loading && (
+          <Box>
+            <img
+              src={posterUrl}
+              alt={`${previewItem.title} poster`}
+              style={{
+                width: '100%',
+                height: 'auto',
+                borderRadius: '8px',
+              }}
+            />
+          </Box>
+        )}
         <Box>
           <Typography fontWeight="medium" mb={1}>
-            Property Group 1
+            Movie Information
           </Typography>
           <LabelValueTable
             rows={[
-              { label: 'Property 1', value: 'value' },
-              { label: 'Property 2', value: 'value' },
-              { label: 'Property 3', value: 'value' },
+              { label: 'Movie ID', value: previewItem.movieId },
+              { label: 'Title', value: previewItem.title },
+              { label: 'Genres', value: previewItem.genres },
+              {
+                label: 'Average Rating',
+                value: ratingStats
+                  ? `${ratingStats.averageRating} / 5.0 (${ratingStats.totalRatings} ratings)`
+                  : 'Loading...',
+              },
+              {
+                label: 'IMDB',
+                value: previewItem.imdbUrl ? (
+                  <Link
+                    href={previewItem.imdbUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
+                  >
+                    View on IMDB <OpenInNewIcon fontSize="small" />
+                  </Link>
+                ) : (
+                  'N/A'
+                ),
+              },
             ]}
           />
         </Box>
-        <Box>
-          <Typography fontWeight="medium" mb={1}>
-            Property Group 2
-          </Typography>
-          <LabelValueTable
-            rows={[
-              { label: 'Property 4', value: 'value' },
-              { label: 'Property 5', value: 'value' },
-            ]}
-          />
-        </Box>
-        <Box>
-          <Typography fontWeight="medium" mb={1}>
-            Related Data
-          </Typography>
-          <DataGrid
-            rows={relatedRows}
-            columns={relatedColumns}
-            disableRowSelectionOnClick
-            initialState={{
-              pagination: { paginationModel: { pageSize: 5 } },
-            }}
-          />
-        </Box>
-        <Stack direction="row">
-          <AppLink to="/explore-data/$id" params={{ id: previewItem.Id }}>
+        {ratingStats && ratingStats.recentRatings.length > 0 && (
+          <Box>
+            <Typography fontWeight="medium" mb={1}>
+              Recent Ratings
+            </Typography>
+            <DataGrid
+              rows={ratingStats.recentRatings}
+              getRowId={(row) => `${row.userId}-${row.timestamp}`}
+              columns={[
+                {
+                  field: 'userId',
+                  headerName: 'User ID',
+                  width: 100,
+                },
+                {
+                  field: 'rating',
+                  headerName: 'Rating',
+                  width: 80,
+                },
+                {
+                  field: 'date',
+                  headerName: 'Date',
+                  width: 150,
+                },
+              ]}
+              disableRowSelectionOnClick
+              autoHeight
+              hideFooter
+            />
+          </Box>
+        )}
+        <Stack direction="row" spacing={1}>
+          <AppLink to="/explore-data/$id" params={{ id: previewItem.movieId }}>
             <Button variant="contained">View details</Button>
           </AppLink>
-          <Button variant="outlined">Export data</Button>
         </Stack>
       </Stack>
     </Paper>

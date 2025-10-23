@@ -13,37 +13,13 @@ import { AppLink } from '../../../components/AppLink';
 import { LabelValueTable } from '../../../components/LabelValueTable';
 
 /**
- * Placeholder columns for attached files table
+ * Columns for featured movies table
  */
-const attachedFilesColumns: GridColDef[] = [
+const featuredMoviesColumns: GridColDef[] = [
   {
-    field: 'file_name',
-    headerName: 'File Name',
+    field: 'title',
+    headerName: 'Movie',
     flex: 1,
-  },
-  {
-    field: 'file_size',
-    headerName: 'Size',
-    type: 'number',
-    width: 150,
-  },
-];
-
-/**
- * Placeholder rows for attached files table
- */
-const attachedFiles = [
-  {
-    file_name: 'file1.csv',
-    file_size: '15 MB',
-  },
-  {
-    file_name: 'file2.json',
-    file_size: '117 MB',
-  },
-  {
-    file_name: 'file3.json',
-    file_size: '4 MB',
   },
 ];
 
@@ -90,31 +66,36 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               <CloseIcon />
             </IconButton>
           </Stack>
-          <Typography variant="body2">
-            (Optional) Entity description or helper text.
+          <Typography variant="body2" color="text.secondary">
+            {previewItem.category}
           </Typography>
         </Stack>
         <Box>
           <Typography fontWeight="medium" mb={1}>
-            Dates
+            Collection Details
           </Typography>
           <LabelValueTable
             rows={[
-              { label: 'Publication Date', value: '2019-01-01' },
-              { label: 'Start Date', value: '2019-01-01' },
-              { label: 'End Date', value: '2019-01-01' },
+              { label: 'Curator', value: previewItem.curator },
+              { label: 'Movie Count', value: previewItem.movie_count },
+              { label: 'Avg Rating', value: `${previewItem.avg_rating} / 5.0` },
+              {
+                label: 'Published',
+                value: new Date(
+                  previewItem.publication_date
+                ).toLocaleDateString(),
+              },
             ]}
           />
         </Box>
-        <Box>
-          <Typography fontWeight="medium" mb={1}>
-            Citation
-          </Typography>
-          <Typography>
-            Labore proident do aute et esse adipisicing veniam eiusmod culpa
-            pariatur sunt officia.
-          </Typography>
-        </Box>
+        {previewItem.description && (
+          <Box>
+            <Typography fontWeight="medium" mb={1}>
+              Description
+            </Typography>
+            <Typography>{previewItem.description}</Typography>
+          </Box>
+        )}
         {previewItem.summary && (
           <Box>
             <Typography fontWeight="medium" mb={1}>
@@ -139,28 +120,31 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
             </Typography>
           </Box>
         )}
-        <Box>
-          <Typography fontWeight="medium" mb={1}>
-            Attached Files
-          </Typography>
-          <DataGrid
-            getRowId={(row) => row.file_name}
-            rows={attachedFiles}
-            columns={attachedFilesColumns}
-            disableRowSelectionOnClick
-            initialState={{
-              pagination: { paginationModel: { pageSize: 5 } },
-            }}
-          />
-        </Box>
-        <Stack direction="row">
+        {previewItem.featured_movies &&
+          previewItem.featured_movies.length > 0 && (
+            <Box>
+              <Typography fontWeight="medium" mb={1}>
+                Featured Movies
+              </Typography>
+              <DataGrid
+                getRowId={(row) => row.title}
+                rows={previewItem.featured_movies.map((title: string) => ({
+                  title,
+                }))}
+                columns={featuredMoviesColumns}
+                disableRowSelectionOnClick
+                autoHeight
+                hideFooter
+              />
+            </Box>
+          )}
+        <Stack direction="row" spacing={1}>
           <AppLink
             to="/search-data-repositories/$id"
             params={{ id: previewItem.id }}
           >
-            <Button variant="contained">View datasets</Button>
+            <Button variant="contained">View Collection Details</Button>
           </AppLink>
-          <Button variant="outlined">Download files</Button>
         </Stack>
       </Stack>
     </Paper>

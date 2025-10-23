@@ -23,9 +23,9 @@ function ScenarioList() {
     <Box>
       <PageHeader
         // CUSTOMIZE: the title that displays at the top of the page
-        pageTitle="Compare Data App"
+        pageTitle="Compare Movies"
         // CUSTOMIZE: the subtitle that displays underneath the title
-        description="Description of this app section"
+        description="Select multiple movies to compare their information side-by-side"
         actions={
           <Stack direction="row">
             <Box>
@@ -36,13 +36,13 @@ function ScenarioList() {
                   disabled
                   data-testid="cpd-compare-button"
                 >
-                  Compare scenarios
+                  Compare movies
                 </Button>
               )}
               {state.selectedRows.length > 1 && (
                 <AppLink to="/compare-data/compare">
                   <Button variant="contained" data-testid="cpd-compare-button">
-                    Compare scenarios ({state.selectedRows.length})
+                    Compare movies ({state.selectedRows.length})
                   </Button>
                 </AppLink>
               )}
@@ -51,7 +51,7 @@ function ScenarioList() {
               <AppLink to="/compare-data/new">
                 {/* CUSTOMIZE: the new button text */}
                 <Button variant="contained" data-testid="cpd-new-button">
-                  New scenario
+                  New movie
                 </Button>
               </AppLink>
             </Box>

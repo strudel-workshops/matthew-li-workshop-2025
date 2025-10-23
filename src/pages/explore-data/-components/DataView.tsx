@@ -1,11 +1,12 @@
-import { Alert, Box, LinearProgress, Skeleton } from '@mui/material';
-import { GridPaginationModel } from '@mui/x-data-grid';
+import { Alert, Box, LinearProgress, Link, Skeleton } from '@mui/material';
+import { GridPaginationModel, GridColDef } from '@mui/x-data-grid';
 import React, { useState } from 'react';
 import { useFilters } from '../../../components/FilterContext';
 import { SciDataGrid } from '../../../components/SciDataGrid';
 import { filterData } from '../../../utils/filters.utils';
-import { useListQuery } from '../../../hooks/useListQuery';
 import { FilterConfig } from '../../../types/filters.types';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { useMoviesWithLinks } from '../../../hooks/useMoviesWithLinks';
 
 interface DataViewProps {
   filterConfigs: FilterConfig[];
@@ -23,22 +24,16 @@ export const DataView: React.FC<DataViewProps> = ({
   const { activeFilters } = useFilters();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
-  const [offset, setOffest] = useState(page * pageSize);
   // CUSTOMIZE: the unique ID field for the data source
-  const dataIdField = 'Id';
+  const dataIdField = 'movieId';
   // CUSTOMIZE: query mode, 'client' or 'server'
   const queryMode = 'client';
-  const { isPending, isFetching, isError, data, error } = useListQuery({
-    activeFilters,
-    // CUSTOMIZE: the table data source
-    dataSource: 'dummy-data/exoplanets.csv',
-    filterConfigs,
-    offset,
-    page,
-    pageSize,
-    queryMode,
-    staticParams: null,
-  });
+  // Load movies with IMDB links merged
+  const data = useMoviesWithLinks();
+  const isPending = !data;
+  const isFetching = false;
+  const isError = false;
+  const error = null;
 
   const handleRowClick = (rowData: any) => {
     setPreviewItem(rowData.row);
@@ -48,10 +43,8 @@ export const DataView: React.FC<DataViewProps> = ({
     // Reset page to first when the page size changes
     const newPage = model.pageSize !== pageSize ? 0 : model.page;
     const newPageSize = model.pageSize;
-    const newOffset = newPage * newPageSize;
     setPage(newPage);
     setPageSize(newPageSize);
-    setOffest(newOffset);
   };
 
   // Show a loading skeleton while the initial query is pending
@@ -72,7 +65,7 @@ export const DataView: React.FC<DataViewProps> = ({
   }
 
   // Show an error message if the query fails
-  if (isError) {
+  if (isError && error) {
     return <Alert severity="error">{error.message}</Alert>;
   }
 
@@ -87,43 +80,47 @@ export const DataView: React.FC<DataViewProps> = ({
         onPaginationModelChange={handlePaginationModelChange}
         getRowId={(row) => row[dataIdField]}
         // CUSTOMIZE: the table columns
-        columns={[
-          {
-            field: 'Planet Name',
-            headerName: 'Planet Name',
-            width: 200,
-          },
-          {
-            field: 'Planet Host',
-            headerName: 'Planet Host',
-            width: 200,
-          },
-          {
-            field: 'Discovery Method',
-            headerName: 'Discovery Method',
-            width: 200,
-          },
-          {
-            field: 'Orbital Period Days',
-            headerName: 'Orbital Period',
-            units: 'days',
-            type: 'number',
-            width: 200,
-          },
-          {
-            field: 'Mass',
-            headerName: 'Mass',
-            units: 'Earth Mass',
-            type: 'number',
-            width: 200,
-          },
-          {
-            field: 'Eccentricity',
-            headerName: 'Eccentricity',
-            type: 'number',
-            width: 200,
-          },
-        ]}
+        columns={
+          [
+            {
+              field: 'movieId',
+              headerName: 'ID',
+              width: 100,
+              type: 'number',
+            },
+            {
+              field: 'title',
+              headerName: 'Title',
+              width: 400,
+              flex: 1,
+            },
+            {
+              field: 'genres',
+              headerName: 'Genres',
+              width: 300,
+            },
+            {
+              field: 'imdbUrl',
+              headerName: 'IMDB',
+              width: 100,
+              renderCell: (params) => {
+                if (params.value) {
+                  return (
+                    <Link
+                      href={params.value}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
+                    >
+                      Link <OpenInNewIcon fontSize="small" />
+                    </Link>
+                  );
+                }
+                return null;
+              },
+            },
+          ] as GridColDef[]
+        }
         disableColumnSelector
         autoHeight
         initialState={{

@@ -13,53 +13,27 @@ export const Route = createFileRoute('/compare-data/_layout')({
  */
 function CompareDataWrapper() {
   // CUSTOMIZE: the data source for the main data table.
-  const scenarios = useDataFromSource('dummy-data/scenarios.json');
+  const movies = useDataFromSource('data/movies.csv');
 
   // CUSTOMIZE: the columns for the main data table
   const columns = [
     {
-      field: 'name',
-      headerName: 'Scenario Name',
-      width: 200,
+      field: 'movieId',
+      headerName: 'ID',
+      width: 100,
+      type: 'number',
     },
     {
-      field: 'description',
-      headerName: 'Description',
-      width: 200,
-    },
-    {
-      field: 'analysis_type',
-      headerName: 'Analysis Type',
-      width: 200,
-    },
-    {
-      field: 'volumetric_flow_rate',
-      headerName: 'Volumetric Flow Rate',
-      width: 200,
+      field: 'title',
+      headerName: 'Title',
+      width: 400,
+      flex: 1,
       isComparisonMetric: true,
     },
     {
-      field: 'tss_concentration',
-      headerName: 'TSS Concentration',
-      width: 200,
-      isComparisonMetric: true,
-    },
-    {
-      field: 'cod_concentration',
-      headerName: 'COD Concentration',
-      width: 200,
-      isComparisonMetric: true,
-    },
-    {
-      field: 'tkn_concentration',
-      headerName: 'TKN Concentration',
-      width: 200,
-      isComparisonMetric: true,
-    },
-    {
-      field: 'acetic_acid_concentration',
-      headerName: 'Acetic Acid Concentration',
-      width: 200,
+      field: 'genres',
+      headerName: 'Genres',
+      width: 300,
       isComparisonMetric: true,
     },
   ];
@@ -67,10 +41,10 @@ function CompareDataWrapper() {
   return (
     <Box>
       <CompareDataProvider
-        data={scenarios || []}
+        data={movies || []}
         columns={columns}
         // CUSTOMIZE: the unique identifier field in the data
-        dataIdField="id"
+        dataIdField="movieId"
       >
         <Outlet />
       </CompareDataProvider>

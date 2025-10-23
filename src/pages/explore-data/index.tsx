@@ -16,51 +16,31 @@ export const Route = createFileRoute('/explore-data/')({
 // CUSTOMIZE: the filter definitions
 const filterConfigs: FilterConfig[] = [
   {
-    field: 'Discovery Method',
-    label: 'Discovery Method',
+    field: 'genres',
+    label: 'Genre',
     operator: 'contains-one-of',
     filterComponent: 'CheckboxList',
     filterProps: {
       options: [
-        {
-          label: 'Astrometry',
-          value: 'Astrometry',
-        },
-        {
-          label: 'Disk Kinematics',
-          value: 'Disk Kinematics',
-        },
-        {
-          label: 'Eclipse Timing Variations',
-          value: 'Eclipse Timing Variations',
-        },
-        {
-          label: 'Imaging',
-          value: 'Imaging',
-        },
-        {
-          label: 'Microlensing',
-          value: 'Microlensing',
-        },
-        {
-          label: 'Radial Velocity',
-          value: 'Radial Velocity',
-        },
-        {
-          label: 'Transit',
-          value: 'Transit',
-        },
+        { label: 'Action', value: 'Action' },
+        { label: 'Adventure', value: 'Adventure' },
+        { label: 'Animation', value: 'Animation' },
+        { label: 'Children', value: 'Children' },
+        { label: 'Comedy', value: 'Comedy' },
+        { label: 'Crime', value: 'Crime' },
+        { label: 'Documentary', value: 'Documentary' },
+        { label: 'Drama', value: 'Drama' },
+        { label: 'Fantasy', value: 'Fantasy' },
+        { label: 'Film-Noir', value: 'Film-Noir' },
+        { label: 'Horror', value: 'Horror' },
+        { label: 'Musical', value: 'Musical' },
+        { label: 'Mystery', value: 'Mystery' },
+        { label: 'Romance', value: 'Romance' },
+        { label: 'Sci-Fi', value: 'Sci-Fi' },
+        { label: 'Thriller', value: 'Thriller' },
+        { label: 'War', value: 'War' },
+        { label: 'Western', value: 'Western' },
       ],
-    },
-  },
-  {
-    field: 'Mass',
-    label: 'Mass',
-    operator: 'between-inclusive',
-    filterComponent: 'RangeSlider',
-    filterProps: {
-      min: 0,
-      max: 10000,
     },
   },
 ];
@@ -92,9 +72,9 @@ function DataExplorer() {
       <Box>
         <PageHeader
           // CUSTOMIZE: the page title
-          pageTitle="Explore Data App"
+          pageTitle="Explore Movies"
           // CUSTOMIZE: the page description
-          description="Description of this app"
+          description="Browse and explore the MovieLens dataset"
           sx={{
             marginBottom: 1,
             padding: 2,
