@@ -3,6 +3,7 @@ import {
   Box,
   Card,
   CardContent,
+  Chip,
   CircularProgress,
   Container,
   Grid,
@@ -15,6 +16,7 @@ import { PageHeader } from '../../components/PageHeader';
 import { useMoviesWithLinks } from '../../hooks/useMoviesWithLinks';
 import { useTMDBPoster } from '../../hooks/useTMDBPoster';
 import { useMovieRatings } from '../../hooks/useMovieRatings';
+import { useMovieTags } from '../../hooks/useMovieTags';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import Plot from 'react-plotly.js';
 
@@ -32,9 +34,10 @@ function DataDetailPage() {
   const movies = useMoviesWithLinks();
   const data = movies?.find((movie) => movie.movieId === id);
 
-  // Load movie poster and ratings
+  // Load movie poster, ratings, and tags
   const { posterUrl, loading } = useTMDBPoster(data?.tmdbId);
   const ratingStats = useMovieRatings(data?.movieId);
+  const tagData = useMovieTags(data?.movieId);
 
   return (
     <Box>
@@ -215,7 +218,7 @@ function DataDetailPage() {
 
             {/* Rating Distribution Chart */}
             {ratingStats && ratingStats.distribution.length > 0 && (
-              <Paper sx={{ padding: 2 }}>
+              <Paper sx={{ padding: 2, marginBottom: 3 }}>
                 <Typography variant="h6" gutterBottom>
                   Rating Distribution
                 </Typography>
@@ -247,6 +250,36 @@ function DataDetailPage() {
                   style={{ width: '100%' }}
                   useResizeHandler
                 />
+              </Paper>
+            )}
+
+            {/* User-Generated Tags */}
+            {tagData && tagData.tags.length > 0 && (
+              <Paper sx={{ padding: 3 }}>
+                <Typography variant="h6" gutterBottom>
+                  User-Generated Tags
+                </Typography>
+                <Typography variant="body2" color="text.secondary" paragraph>
+                  {tagData.totalTags} tags from MovieLens users
+                </Typography>
+                <Stack direction="row" flexWrap="wrap" gap={1}>
+                  {tagData.tags.slice(0, 20).map((tag) => (
+                    <Chip
+                      key={tag.tag}
+                      label={`${tag.tag} (${tag.count})`}
+                      size="medium"
+                      sx={{
+                        fontSize: tag.count > 2 ? '0.95rem' : '0.875rem',
+                        fontWeight: tag.count > 2 ? 'bold' : 'normal',
+                      }}
+                    />
+                  ))}
+                </Stack>
+                {tagData.tags.length > 20 && (
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                    Showing top 20 of {tagData.tags.length} unique tags
+                  </Typography>
+                )}
               </Paper>
             )}
           </Grid>

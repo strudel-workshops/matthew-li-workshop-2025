@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
-import { useDataFromSource } from '../../hooks/useDataFromSource';
+import { useMoviesWithRatings } from '../../hooks/useMoviesWithRatings';
 import { CompareDataProvider } from './-context/ContextProvider';
 
 export const Route = createFileRoute('/compare-data/_layout')({
@@ -12,8 +12,8 @@ export const Route = createFileRoute('/compare-data/_layout')({
  * Inner pages are rendered inside the `<Outlet />` component
  */
 function CompareDataWrapper() {
-  // CUSTOMIZE: the data source for the main data table.
-  const movies = useDataFromSource('data/movies.csv');
+  // Load movies with rating statistics
+  const movies = useMoviesWithRatings();
 
   // CUSTOMIZE: the columns for the main data table
   const columns = [
@@ -35,6 +35,30 @@ function CompareDataWrapper() {
       headerName: 'Genres',
       width: 300,
       isComparisonMetric: true,
+    },
+    {
+      field: 'averageRating',
+      headerName: 'Avg Rating',
+      width: 120,
+      type: 'number',
+      isComparisonMetric: true,
+      valueFormatter: (params: any) => params ? `${params} / 5.0` : 'N/A',
+    },
+    {
+      field: 'medianRating',
+      headerName: 'Median Rating',
+      width: 140,
+      type: 'number',
+      isComparisonMetric: true,
+      valueFormatter: (params: any) => params ? `${params} / 5.0` : 'N/A',
+    },
+    {
+      field: 'totalRatings',
+      headerName: 'Total Ratings',
+      width: 140,
+      type: 'number',
+      isComparisonMetric: true,
+      valueFormatter: (params: any) => params ? params.toLocaleString() : '0',
     },
   ];
 

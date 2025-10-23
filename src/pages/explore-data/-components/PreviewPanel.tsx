@@ -51,10 +51,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
         <Stack spacing={1}>
           <Stack direction="row">
             <Typography variant="h6" component="h3" flex={1}>
-              <AppLink
-                to="/explore-data/$id"
-                params={{ id: previewItem.movieId }}
-              >
+              <AppLink to="/explore-data/$id" params={{ id: previewItem.movieId }}>
                 {previewItem.title}
               </AppLink>
             </Typography>
@@ -62,7 +59,9 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               <CloseIcon />
             </IconButton>
           </Stack>
-          <Typography variant="body2">{previewItem.genres}</Typography>
+          <Typography variant="body2">
+            {previewItem.genres}
+          </Typography>
         </Stack>
         {loading && (
           <Box display="flex" justifyContent="center" p={2}>
@@ -90,12 +89,11 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
             rows={[
               { label: 'Movie ID', value: previewItem.movieId },
               { label: 'Title', value: previewItem.title },
+              { label: 'Release Year', value: previewItem.releaseYear || 'Unknown' },
               { label: 'Genres', value: previewItem.genres },
-              {
-                label: 'Average Rating',
-                value: ratingStats
-                  ? `${ratingStats.averageRating} / 5.0 (${ratingStats.totalRatings} ratings)`
-                  : 'Loading...',
+              { 
+                label: 'Average Rating', 
+                value: ratingStats ? `${ratingStats.averageRating} / 5.0 (${ratingStats.totalRatings} ratings)` : 'Loading...' 
               },
               {
                 label: 'IMDB',
@@ -126,10 +124,9 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               columns={[
                 {
                   field: 'userId',
-                  headerName: 'User ID',
+                  headerName: 'User',
                   width: 100,
-                },
-                {
+                  renderCell: (params) => `User #${params.value}`,
                   field: 'rating',
                   headerName: 'Rating',
                   width: 80,

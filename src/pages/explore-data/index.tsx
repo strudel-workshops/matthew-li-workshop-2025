@@ -7,7 +7,9 @@ import { DataView } from './-components/DataView';
 import { DataViewHeader } from './-components/DataViewHeader';
 import { FiltersPanel } from './-components/FiltersPanel';
 import { PreviewPanel } from './-components/PreviewPanel';
+import { DataVisualizations } from './-components/DataVisualizations';
 import { FilterConfig } from '../../types/filters.types';
+import { useMoviesWithRatings } from '../../hooks/useMoviesWithRatings';
 
 export const Route = createFileRoute('/explore-data/')({
   component: DataExplorer,
@@ -54,6 +56,7 @@ function DataExplorer() {
   const [searchTerm, setSearchTerm] = useState('');
   const [previewItem, setPreviewItem] = useState<any>();
   const [showFiltersPanel, setShowFiltersPanel] = useState(true);
+  const moviesWithRatings = useMoviesWithRatings();
 
   const handleCloseFilters = () => {
     setShowFiltersPanel(false);
@@ -80,6 +83,11 @@ function DataExplorer() {
             padding: 2,
           }}
         />
+        <Box sx={{ px: 2 }}>
+          {moviesWithRatings && moviesWithRatings.length > 0 && (
+            <DataVisualizations movies={moviesWithRatings} />
+          )}
+        </Box>
         <Box>
           <Stack direction="row">
             {showFiltersPanel && (
